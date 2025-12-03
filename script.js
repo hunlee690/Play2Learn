@@ -36,6 +36,7 @@ const quizzes = {
 
 // ========== STATE ==========
 let currentCategory = null;
+let currentMode = "default";
 let currentQuestions = [];
 let currentIndex = 0;
 let score = 0;
@@ -46,6 +47,9 @@ let currentStreak = 0;
 let bestStreak = 0;
 
 // ========== DOM ELEMENTS ==========
+const body = document.body;
+const subjectName = body.dataset.subject || null; // "math" / "science" / "english" only on subject pages
+
 const quizCard = document.getElementById("quizCard");
 const quizTitle = document.getElementById("quizTitle");
 const quizQuestion = document.getElementById("quizQuestion");
@@ -67,47 +71,162 @@ const levelBadgeEl = document.getElementById("levelBadge");
 const correctCountEl = document.getElementById("correctCount");
 const bestStreakEl = document.getElementById("bestStreak");
 
-document.getElementById("year").textContent = new Date().getFullYear();
+// Year in footer
+const yearEl = document.getElementById("year");
+if (yearEl) {
+  yearEl.textContent = new Date().getFullYear();
+}
 
 // ========== EVENT LISTENERS ==========
-document.querySelectorAll(".category-card").forEach((card) => {
-  card.addEventListener("click", () => startQuiz(card.dataset.category));
-});
 
-document.getElementById("startAnyQuizBtn").addEventListener("click", () => {
-  const keys = Object.keys(quizzes);
-  startQuiz(keys[Math.floor(Math.random() * keys.length)]);
-});
+// Subject or mode cards
+const categoryCards = document.querySelectorAll(".category-card");
 
-nextBtn.addEventListener("click", () => {
-  currentIndex++;
-  currentIndex < currentQuestions.length ? renderQuestion() : endQuiz();
-});
+if (!subjectName) {
+  // ---- HOME PAGE: cards = subjects → go to subject pages ----
+  categoryCards.forEach((card) => {
+    const category = card.dataset.category; // "math", "science", "english"
+    if (!category) return;
 
-playAgainBtn.addEventListener("click", () => startQuiz(currentCategory));
+    card.addEventListener("click", () => {
+      // Navigate to the subject page
+      window.location.href = `${category}.html`;
+    });
+  });
+} else {
+  // ---- SUBJECT PAGE: cards = test types (modes) → start quiz ----
+  categoryCards.forEach((card) => {
+    const mode = card.dataset.mode || "default"; // "easy" | "speed" | "challenge"
+
+    card.addEventListener("click", () => {
+      startQuiz(subjectName, mode);
+      if (quizCard) {
+        quizCard.scrollIntoView({ behavior: "smooth" });
+      }
+    });
+  });
+}
+
+// Quick / random quiz button (exists on home + subject pages)
+const startAnyQuizBtn = document.getElementById("startAnyQuizBtn");
+if (startAnyQuizBtn) {
+  startAnyQuizBtn.addEventListener("click", () => {
+    if (!subjectName) {
+      // Home: random subject, fixed mode (speed)
+      const keys = Object.keys(quizzes);
+      const randomCat = keys[Math.floor(Math.random() * keys.length)];
+      startQuiz(randomCat, "speed");
+    } else {
+      // Subject page: random mode for this subject
+      const modes = ["easy", "speed", "challenge"];
+      const randomMode = modes[Math.floor(Math.random() * modes.length)];
+      startQuiz(subjectName, randomMode);
+    }
+
+    if (quizCard) {
+      quizCard.scrollIntoView({ behavior: "smooth" });
+    }
+  });
+}
+
+// Next question button
+if (nextBtn) {
+  nextBtn.addEventListener("click", () => {
+    currentIndex++;
+    currentIndex < currentQuestions.length ? renderQuestion() : endQuiz();
+  });
+}
+
+// Play again button
+if (playAgainBtn) {
+  playAgainBtn.addEventListener("click", () => {
+    if (currentCategory) {
+      startQuiz(currentCategory, currentMode);
+      if (quizCard) {
+        quizCard.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  });
+}
 
 // ========== QUIZ FUNCTIONS ==========
-function startQuiz(category) {
+
+function startQuiz(category, mode = "default") {
+  if (!quizzes[category]) return;
+
   currentCategory = category;
-  currentQuestions = shuffleArray([...quizzes[category].questions]);
+  currentMode = mode;
+
+  currentQuestions = getQuestionsForMode(category, mode);
   currentIndex = 0;
   score = 0;
   currentStreak = 0;
   updateScoreUI();
 
-  quizTitle.textContent = quizzes[category].title;
-  quizCard.style.display = "block";
-  quizResult.style.display = "none";
+  if (quizTitle) {
+    quizTitle.textContent = `${quizzes[category].title} · ${getModeLabel(mode)}`;
+  }
+  if (quizCard) {
+    quizCard.style.display = "block";
+  }
+  if (quizResult) {
+    quizResult.style.display = "none";
+  }
+
   renderQuestion();
+}
+
+function getModeLabel(mode) {
+  switch (mode) {
+    case "easy":
+      return "Warm-Up";
+    case "speed":
+      return "Speed Quiz";
+    case "challenge":
+      return "Challenge";
+    default:
+      return "Quiz";
+  }
+}
+
+function getQuestionsForMode(category, mode) {
+  const base = [...quizzes[category].questions];
+  const shuffled = shuffleArray(base);
+
+  if (mode === "easy") {
+    return shuffled.slice(0, Math.min(3, shuffled.length));
+  }
+  if (mode === "speed") {
+    return shuffled.slice(0, Math.min(5, shuffled.length));
+  }
+  if (mode === "challenge") {
+    const extended = shuffled.concat(shuffleArray(base));
+    return extended.slice(0, Math.min(7, extended.length));
+  }
+
+  // default mode: just shuffled full list
+  return shuffled;
 }
 
 function renderQuestion() {
   const q = currentQuestions[currentIndex];
-  quizQuestion.textContent = q.question;
-  quizProgressText.textContent = `Question ${currentIndex + 1} of ${currentQuestions.length}`;
-  quizOptions.innerHTML = "";
-  feedbackEl.textContent = "";
-  nextBtn.disabled = true;
+  if (!q) return;
+
+  if (quizQuestion) {
+    quizQuestion.textContent = q.question;
+  }
+  if (quizProgressText) {
+    quizProgressText.textContent = `Question ${currentIndex + 1} of ${currentQuestions.length}`;
+  }
+  if (quizOptions) {
+    quizOptions.innerHTML = "";
+  }
+  if (feedbackEl) {
+    feedbackEl.textContent = "";
+  }
+  if (nextBtn) {
+    nextBtn.disabled = true;
+  }
 
   q.options.forEach((text, index) => {
     const btn = document.createElement("button");
@@ -129,12 +248,12 @@ function handleAnswer(selectedIndex) {
   });
 
   if (correct) {
-    feedbackEl.textContent = "Correct! 🎉";
+    if (feedbackEl) feedbackEl.textContent = "Correct! 🎉";
     score += 10;
     totalXP += 10;
     currentStreak++;
   } else {
-    feedbackEl.textContent = "Oops! Try the next one.";
+    if (feedbackEl) feedbackEl.textContent = "Oops! Try the next one.";
     currentStreak = 0;
   }
 
@@ -145,12 +264,17 @@ function handleAnswer(selectedIndex) {
   updateScoreUI();
   updateXPUI();
 
-  nextBtn.disabled = false;
+  if (nextBtn) {
+    nextBtn.disabled = false;
+  }
 }
 
 function endQuiz() {
+  if (!quizResult) return;
+
   quizResult.style.display = "block";
-  const totalQ = currentQuestions.length;
+
+  const totalQ = currentQuestions.length || 1;
   const percent = (score / (totalQ * 10)) * 100;
 
   if (percent >= 80) starRow.textContent = "⭐️⭐️⭐️";
@@ -163,13 +287,22 @@ function endQuiz() {
 }
 
 // ========== UI HELPERS ==========
+
 function updateScoreUI() {
-  scoreDisplay.textContent = `Score: ${score}`;
-  correctCountEl.textContent = Math.floor(totalXP / 10);
-  bestStreakEl.textContent = bestStreak;
+  if (scoreDisplay) {
+    scoreDisplay.textContent = `Score: ${score}`;
+  }
+  if (correctCountEl) {
+    correctCountEl.textContent = Math.floor(totalXP / 10);
+  }
+  if (bestStreakEl) {
+    bestStreakEl.textContent = bestStreak;
+  }
 }
 
 function updateXPUI() {
+  if (!xpValueEl || !xpProgressEl || !levelBadgeEl) return;
+
   xpValueEl.textContent = `${totalXP} XP`;
 
   // Simple level system: every 50 XP = next level
