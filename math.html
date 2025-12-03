@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Play2Learn - Math Adventures</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-subject="math">
+  <header>
+    <div class="logo">
+      <div class="logo-icon">P2L</div>
+      <div>
+        <div class="logo-text-main">Play2Learn</div>
+        <div class="logo-text-sub">Math Adventures</div>
+      </div>
+    </div>
+    <div class="nav-badge">➕ Numbers · Puzzles · Fun</div>
+  </header>
+
+  <main>
+    <!-- HERO FOR SUBJECT -->
+    <section class="hero">
+      <div>
+        <h1 class="hero-title">
+          Welcome to <span class="hero-highlight">Math Adventures</span>!
+        </h1>
+        <p class="hero-subtitle">
+          Choose your favourite kind of math test. Start easy, speed up, or try a challenge!
+        </p>
+
+        <div class="hero-buttons">
+          <button class="btn btn-primary" id="startAnyQuizBtn">
+            ▶ Start a Random Math Test
+          </button>
+          <a href="index.html" class="btn btn-ghost">⬅ Back to Subjects</a>
+        </div>
+      </div>
+
+      <aside class="hero-card">
+        <div class="hero-card-badge">Math XP Tracker</div>
+        <div class="hero-card-title">Today's Class Stars</div>
+        <div class="xp-row">
+          <div>
+            <div class="xp-label">Total XP earned</div>
+            <div class="xp-value" id="xpValue">0 XP</div>
+          </div>
+          <div class="pill" id="levelBadge">Level 1 · Rookie</div>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="xpProgress"></div>
+        </div>
+        <div class="small-text">
+          Correct answers give XP and help you unlock new levels!
+        </div>
+        <div class="hero-card-footer">
+          <span>✔ Correct answers: <strong id="correctCount">0</strong></span>
+          <span>🏅 Best streak: <strong id="bestStreak">0</strong></span>
+        </div>
+      </aside>
+    </section>
+
+    <!-- TEST TYPES -->
+    <section>
+      <h2 class="section-title">
+        Choose your Math test
+        <span>Tap a card to start that test.</span>
+      </h2>
+
+      <div class="category-grid">
+        <article class="category-card" data-mode="easy">
+          <div class="category-icon">🌱</div>
+          <div class="category-title">Warm-Up Numbers</div>
+          <div class="category-level">3 simple questions to get started.</div>
+          <div class="category-meta">
+            <span>Level: Easy</span>
+            <span>3 questions</span>
+          </div>
+        </article>
+
+        <article class="category-card" data-mode="speed">
+          <div class="category-icon">⚡</div>
+          <div class="category-title">Speed Quiz</div>
+          <div class="category-level">A quick 5-question test.</div>
+          <div class="category-meta">
+            <span>Level: Medium</span>
+            <span>5 questions</span>
+          </div>
+        </article>
+
+        <article class="category-card" data-mode="challenge">
+          <div class="category-icon">🔥</div>
+          <div class="category-title">Brain Challenge</div>
+          <div class="category-level">A longer mix for brave minds!</div>
+          <div class="category-meta">
+            <span>Level: Hard</span>
+            <span>7 questions</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- QUIZ AREA -->
+    <section class="quiz-card" id="quizCard">
+      <div class="quiz-header">
+        <div>
+          <div class="quiz-title" id="quizTitle">Math Quiz</div>
+          <div class="quiz-progress-text" id="quizProgressText">
+            Question 1 of 5
+          </div>
+        </div>
+        <div class="score-pill" id="scoreDisplay">Score: 0</div>
+      </div>
+
+      <div>
+        <div class="quiz-question" id="quizQuestion"></div>
+        <ul class="quiz-options" id="quizOptions"></ul>
+      </div>
+
+      <div class="quiz-footer">
+        <div class="feedback" id="feedback"></div>
+        <button class="btn btn-primary" id="nextBtn" disabled>Next ▶</button>
+      </div>
+
+      <div class="quiz-result" id="quizResult">
+        <div class="star-row" id="starRow"></div>
+        <h3 id="resultTitle"></h3>
+        <p id="resultSummary"></p>
+        <button class="btn btn-primary" id="playAgainBtn">🔁 Play again</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © <span id="year"></span> Play2Learn · Built for curious kids and happy teachers.
+  </footer>
+
+  <!-- JS -->
+  <script src="script.js"></script>
+</body>
+</html>
