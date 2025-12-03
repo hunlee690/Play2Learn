@@ -5,15 +5,18 @@
   <title>Play2Learn - Fun Quizzes for Kids</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Google Font for a friendlier look -->
+  <!-- Google Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <!-- Link CSS -->
+  <!-- CSS -->
   <link rel="stylesheet" href="style.css" />
 </head>
+
+<!-- VERY IMPORTANT: No data-subject here -->
 <body>
+
   <header>
     <div class="logo">
       <div class="logo-icon">P2L</div>
@@ -26,16 +29,15 @@
   </header>
 
   <main>
+
     <!-- HERO -->
     <section class="hero">
       <div>
         <h1 class="hero-title">
-          Turn tests into <span class="hero-highlight">adventures</span> with
-          Play2Learn.
+          Turn tests into <span class="hero-highlight">adventures</span> with Play2Learn.
         </h1>
         <p class="hero-subtitle">
-          Kids answer quizzes as games, earn stars and level up their brain
-          power — while teachers get instant scores and insights.
+          Kids answer quizzes as games, earn stars and level up—while teachers get instant results.
         </p>
 
         <div class="hero-tags">
@@ -48,15 +50,13 @@
           <button class="btn btn-primary" id="startAnyQuizBtn">
             ▶ Start a Quick Quiz
           </button>
-          <button class="btn btn-ghost" type="button">
-            🧑‍🏫 Teacher Mode (Coming soon)
-          </button>
         </div>
       </div>
 
       <aside class="hero-card">
-        <div class="hero-card-badge">New · Game School</div>
+        <div class="hero-card-badge">XP Tracker</div>
         <div class="hero-card-title">Today's Class Stars</div>
+
         <div class="xp-row">
           <div>
             <div class="xp-label">Total XP earned</div>
@@ -64,12 +64,15 @@
           </div>
           <div class="pill" id="levelBadge">Level 1 · Rookie</div>
         </div>
+
         <div class="progress-bar">
           <div class="progress-fill" id="xpProgress"></div>
         </div>
+
         <div class="small-text">
-          Answer questions correctly to fill the bar and unlock your next level!
+          Earn XP by answering quiz questions correctly!
         </div>
+
         <div class="hero-card-footer">
           <span>✔ Correct answers: <strong id="correctCount">0</strong></span>
           <span>🏅 Best streak: <strong id="bestStreak">0</strong></span>
@@ -77,31 +80,32 @@
       </aside>
     </section>
 
-    <!-- CATEGORIES -->
+    <!-- SUBJECT SELECTION -->
     <section>
       <h2 class="section-title">
         Pick a subject to start
-        <span>Tap any card to begin a mini quiz.</span>
+        <span>Tap a subject card below.</span>
       </h2>
 
       <div class="category-grid">
+
         <article class="category-card" data-category="math">
           <div class="category-icon">➕</div>
           <div class="category-title">Math Adventures</div>
           <div class="category-level">Add, subtract & think fast.</div>
           <div class="category-meta">
-            <span>5 questions</span>
-            <span>Age 7–11</span>
+            <span>Fun tests</span>
+            <span>Ages 7–11</span>
           </div>
         </article>
 
         <article class="category-card" data-category="science">
           <div class="category-icon">🔬</div>
           <div class="category-title">Science Lab</div>
-          <div class="category-level">Animals, planets & experiments.</div>
+          <div class="category-level">Planets, animals, experiments.</div>
           <div class="category-meta">
-            <span>5 questions</span>
-            <span>Age 8–12</span>
+            <span>Fun tests</span>
+            <span>Ages 8–12</span>
           </div>
         </article>
 
@@ -110,29 +114,26 @@
           <div class="category-title">English Quest</div>
           <div class="category-level">Words, grammar & spelling.</div>
           <div class="category-meta">
-            <span>5 questions</span>
-            <span>Age 8–12</span>
+            <span>Fun tests</span>
+            <span>Ages 8–12</span>
           </div>
         </article>
+
       </div>
     </section>
 
-    <!-- QUIZ AREA -->
+    <!-- QUIZ AREA (for quick quiz only) -->
     <section class="quiz-card" id="quizCard">
       <div class="quiz-header">
         <div>
           <div class="quiz-title" id="quizTitle">Quiz</div>
-          <div class="quiz-progress-text" id="quizProgressText">
-            Question 1 of 5
-          </div>
+          <div class="quiz-progress-text" id="quizProgressText">Question 1 of 5</div>
         </div>
         <div class="score-pill" id="scoreDisplay">Score: 0</div>
       </div>
 
-      <div>
-        <div class="quiz-question" id="quizQuestion"></div>
-        <ul class="quiz-options" id="quizOptions"></ul>
-      </div>
+      <div class="quiz-question" id="quizQuestion"></div>
+      <ul class="quiz-options" id="quizOptions"></ul>
 
       <div class="quiz-footer">
         <div class="feedback" id="feedback"></div>
@@ -146,13 +147,14 @@
         <button class="btn btn-primary" id="playAgainBtn">🔁 Play again</button>
       </div>
     </section>
+
   </main>
 
   <footer>
-    © <span id="year"></span> Play2Learn · Built for curious kids and happy teachers.
+    © <span id="year"></span> Play2Learn
   </footer>
 
-  <!-- Link JS -->
+  <!-- JS -->
   <script src="script.js"></script>
 </body>
 </html>
