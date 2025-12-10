@@ -25,11 +25,11 @@ const quizzes = {
   english: {
     title: "English Quest",
     questions: [
-      { question: "Choose the correct spelling:", options: ["Elefant", "Elephant", "Eliphant", "Elephent"], correctIndex: 1 },
-      { question: "Which word is a noun?", options: ["Run", "Happy", "Book", "Quickly"], correctIndex: 2 },
-      { question: "She ___ to school every day.", options: ["go", "goes", "going", "gone"], correctIndex: 1 },
-      { question: "Which is a describing word?", options: ["Jump", "Blue", "Sing", "Read"], correctIndex: 1 },
-      { question: "Choose the correct sentence:", options: ["i like apples.", "I Like apples.", "I like Apples.", "I like apples."], correctIndex: 3 },
+      { question: "Which word is a noun?", options: ["Run", "Blue", "Cat", "Quickly"], correctIndex: 2 },
+      { question: "Choose the correct spelling:", options: ["Beter", "Better", "Bettr", "Btter"], correctIndex: 1 },
+      { question: "Which is a describing word?", options: ["Apple", "Jump", "Happy", "Sing"], correctIndex: 2 },
+      { question: "Fill in the blank: I ___ to school.", options: ["go", "goes", "going", "gone"], correctIndex: 0 },
+      { question: "Which word is a verb?", options: ["Table", "Slow", "Laugh", "Green"], correctIndex: 2 },
     ],
   },
 };
@@ -40,11 +40,6 @@ let currentMode = "default";
 let currentQuestions = [];
 let currentIndex = 0;
 let score = 0;
-
-// XP / Level state (for hero card)
-let totalXP = 0;
-let currentStreak = 0;
-let bestStreak = 0;
 
 // ========== DOM ELEMENTS ==========
 const body = document.body;
@@ -63,13 +58,6 @@ const resultSummary = document.getElementById("resultSummary");
 const starRow = document.getElementById("starRow");
 const playAgainBtn = document.getElementById("playAgainBtn");
 const scoreDisplay = document.getElementById("scoreDisplay");
-
-// Hero card DOM
-const xpValueEl = document.getElementById("xpValue");
-const xpProgressEl = document.getElementById("xpProgress");
-const levelBadgeEl = document.getElementById("levelBadge");
-const correctCountEl = document.getElementById("correctCount");
-const bestStreakEl = document.getElementById("bestStreak");
 
 // Year in footer
 const yearEl = document.getElementById("year");
@@ -111,16 +99,18 @@ if (!subjectName) {
 const startAnyQuizBtn = document.getElementById("startAnyQuizBtn");
 if (startAnyQuizBtn) {
   startAnyQuizBtn.addEventListener("click", () => {
-    if (!subjectName) {
-      // Home: random subject, fixed mode (speed)
-      const keys = Object.keys(quizzes);
-      const randomCat = keys[Math.floor(Math.random() * keys.length)];
-      startQuiz(randomCat, "speed");
-    } else {
-      // Subject page: random mode for this subject
+    if (subjectName) {
+      // On subject pages: random mode for this subject
       const modes = ["easy", "speed", "challenge"];
       const randomMode = modes[Math.floor(Math.random() * modes.length)];
       startQuiz(subjectName, randomMode);
+    } else {
+      // On home page: pick random subject + random mode
+      const subjects = Object.keys(quizzes);
+      const randomSubject = subjects[Math.floor(Math.random() * subjects.length)];
+      const modes = ["easy", "speed", "challenge"];
+      const randomMode = modes[Math.floor(Math.random() * modes.length)];
+      startQuiz(randomSubject, randomMode);
     }
 
     if (quizCard) {
@@ -129,11 +119,19 @@ if (startAnyQuizBtn) {
   });
 }
 
-// Next question button
+// Next button
 if (nextBtn) {
   nextBtn.addEventListener("click", () => {
+    if (!currentQuestions.length) return;
+
     currentIndex++;
-    currentIndex < currentQuestions.length ? renderQuestion() : endQuiz();
+    if (currentIndex >= currentQuestions.length) {
+      endQuiz();
+    } else {
+      renderQuestion();
+      nextBtn.disabled = true;
+      if (feedbackEl) feedbackEl.textContent = "";
+    }
   });
 }
 
@@ -160,7 +158,6 @@ function startQuiz(category, mode = "default") {
   currentQuestions = getQuestionsForMode(category, mode);
   currentIndex = 0;
   score = 0;
-  currentStreak = 0;
   updateScoreUI();
 
   if (quizTitle) {
@@ -200,32 +197,22 @@ function getQuestionsForMode(category, mode) {
     return shuffled.slice(0, Math.min(5, shuffled.length));
   }
   if (mode === "challenge") {
-    const extended = shuffled.concat(shuffleArray(base));
-    return extended.slice(0, Math.min(7, extended.length));
+    return shuffled.slice(0, Math.min(7, shuffled.length));
   }
-
-  // default mode: just shuffled full list
-  return shuffled;
+  // default
+  return shuffled.slice(0, Math.min(5, shuffled.length));
 }
 
 function renderQuestion() {
+  if (!quizQuestion || !quizOptions || !quizProgressText) return;
   const q = currentQuestions[currentIndex];
   if (!q) return;
 
-  if (quizQuestion) {
-    quizQuestion.textContent = q.question;
-  }
+  quizQuestion.textContent = q.question;
+  quizOptions.innerHTML = "";
+
   if (quizProgressText) {
     quizProgressText.textContent = `Question ${currentIndex + 1} of ${currentQuestions.length}`;
-  }
-  if (quizOptions) {
-    quizOptions.innerHTML = "";
-  }
-  if (feedbackEl) {
-    feedbackEl.textContent = "";
-  }
-  if (nextBtn) {
-    nextBtn.disabled = true;
   }
 
   q.options.forEach((text, index) => {
@@ -250,19 +237,11 @@ function handleAnswer(selectedIndex) {
   if (correct) {
     if (feedbackEl) feedbackEl.textContent = "Correct! 🎉";
     score += 10;
-    totalXP += 10;
-    currentStreak++;
   } else {
     if (feedbackEl) feedbackEl.textContent = "Oops! Try the next one.";
-    currentStreak = 0;
-  }
-
-  if (currentStreak > bestStreak) {
-    bestStreak = currentStreak;
   }
 
   updateScoreUI();
-  updateXPUI();
 
   if (nextBtn) {
     nextBtn.disabled = false;
@@ -292,35 +271,6 @@ function updateScoreUI() {
   if (scoreDisplay) {
     scoreDisplay.textContent = `Score: ${score}`;
   }
-  if (correctCountEl) {
-    correctCountEl.textContent = Math.floor(totalXP / 10);
-  }
-  if (bestStreakEl) {
-    bestStreakEl.textContent = bestStreak;
-  }
-}
-
-function updateXPUI() {
-  if (!xpValueEl || !xpProgressEl || !levelBadgeEl) return;
-
-  xpValueEl.textContent = `${totalXP} XP`;
-
-  // Simple level system: every 50 XP = next level
-  const level = Math.max(1, Math.floor(totalXP / 50) + 1);
-  const currentLevelXP = (level - 1) * 50;
-  const nextLevelXP = level * 50;
-  const progress = Math.min(
-    100,
-    ((totalXP - currentLevelXP) / (nextLevelXP - currentLevelXP)) * 100
-  );
-
-  xpProgressEl.style.width = `${progress}%`;
-
-  let title = "Rookie";
-  if (level >= 4 && level < 7) title = "Explorer";
-  else if (level >= 7) title = "Genius";
-
-  levelBadgeEl.textContent = `Level ${level} · ${title}`;
 }
 
 // ========== HELPERS ==========
