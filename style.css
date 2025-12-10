@@ -74,6 +74,14 @@ header {
   align-items: center;
 }
 
+/* App-style header: used when there is no logo, only the top bar text */
+.app-header {
+  padding: 0.8rem 1.2rem;
+  justify-content: center;
+}
+
+/* (Logo styles kept in case you ever reuse them, but you don't need
+   to add the logo HTML in these pages.) */
 .logo {
   display: flex;
   gap: 0.7rem;
@@ -104,13 +112,15 @@ header {
   opacity: 0.8;
 }
 
+/* Top badge looks like an app bar title pill */
 .nav-badge {
-  padding: 0.4rem 1rem;
+  padding: 0.5rem 1.2rem;
   background: rgba(46, 196, 182, 0.12);
   border-radius: 999px;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   font-weight: 600;
   border: 1px solid rgba(46, 196, 182, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 }
 
 /* ---------- MAIN LAYOUT ---------- */
@@ -182,7 +192,7 @@ main {
 
 /* ---------- BUTTONS ---------- */
 .btn {
-  padding: 0.7rem 1.3rem;
+  padding: 0.8rem 1.4rem; /* slightly bigger for easier tapping */
   border: none;
   border-radius: 999px;
   cursor: pointer;
@@ -541,6 +551,13 @@ footer {
     align-items: flex-start;
     gap: 0.4rem;
   }
+
+  /* Keep the app header centered even on small screens */
+  .app-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 @media (max-width: 600px) {
@@ -556,4 +573,3 @@ footer {
     padding: 0.9rem;
   }
 }
-
