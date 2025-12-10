@@ -15,7 +15,7 @@
 </head>
 
 <body>
-  <header class="app-header">
+  <header>
     <div class="nav-badge">For Schools · Kids · Fun Tests</div>
   </header>
 
@@ -27,46 +27,33 @@
           Turn tests into <span class="hero-highlight">adventures</span>.
         </h1>
         <p class="hero-subtitle">
-          Kids answer quizzes like games, earn stars and level up — while teachers get instant results.
+          Kids answer quizzes like mini games with clear scores at the end — perfect for quick classroom tests.
         </p>
 
         <div class="hero-tags">
-          <span class="tag">🎯 Curriculum-aligned</span>
+          <span class="tag">🎯 Kid-friendly questions</span>
           <span class="tag">🧠 Math · Science · English</span>
-          <span class="tag">⭐ XP, levels & badges</span>
+          <span class="tag">⏱ Short, simple tests</span>
         </div>
 
         <div class="hero-buttons">
           <button class="btn btn-primary" id="startAnyQuizBtn">
-            ▶ Start a Quick Quiz
+            ▶ Start a Quick Random Quiz
           </button>
         </div>
       </div>
 
       <aside class="hero-card">
-        <div class="hero-card-badge">XP Tracker</div>
-        <div class="hero-card-title">Today's Class Stars</div>
-
-        <div class="xp-row">
-          <div>
-            <div class="xp-label">Total XP earned</div>
-            <div class="xp-value" id="xpValue">0 XP</div>
-          </div>
-          <div class="pill" id="levelBadge">Level 1 · Rookie</div>
-        </div>
-
-        <div class="progress-bar">
-          <div class="progress-fill" id="xpProgress"></div>
-        </div>
-
-        <div class="small-text">
-          Earn XP by answering quiz questions correctly!
-        </div>
-
-        <div class="hero-card-footer">
-          <span>✔ Correct answers: <strong id="correctCount">0</strong></span>
-          <span>🏅 Best streak: <strong id="bestStreak">0</strong></span>
-        </div>
+        <div class="hero-card-title">How it works</div>
+        <p class="small-text">
+          • Choose a subject.<br>
+          • Pick a test type (easy, speed or challenge).<br>
+          • Tap the correct answers.<br>
+          • See the score and stars at the end.
+        </p>
+        <p class="small-text">
+          Great for class warm-ups, homework checks, or practice time.
+        </p>
       </aside>
     </section>
 
@@ -74,7 +61,7 @@
     <section>
       <h2 class="section-title">
         Pick a subject to start
-        <span>Tap a subject card below.</span>
+        <span>Tap a subject card to open that quiz screen.</span>
       </h2>
 
       <div class="category-grid">
@@ -92,7 +79,7 @@
         <article class="category-card" data-category="science">
           <div class="category-icon">🔬</div>
           <div class="category-title">Science Lab</div>
-          <div class="category-level">Planets, animals, experiments.</div>
+          <div class="category-level">Space, animals & experiments.</div>
           <div class="category-meta">
             <span>Fun tests</span>
             <span>Ages 8–12</span>
@@ -112,7 +99,7 @@
       </div>
     </section>
 
-    <!-- QUIZ AREA (for quick quiz only) -->
+    <!-- QUIZ AREA (for quick random quiz on home page) -->
     <section class="quiz-card" id="quizCard">
       <div class="quiz-header">
         <div>
@@ -122,8 +109,10 @@
         <div class="score-pill" id="scoreDisplay">Score: 0</div>
       </div>
 
-      <div class="quiz-question" id="quizQuestion"></div>
-      <ul class="quiz-options" id="quizOptions"></ul>
+      <div>
+        <div class="quiz-question" id="quizQuestion"></div>
+        <ul class="quiz-options" id="quizOptions"></ul>
+      </div>
 
       <div class="quiz-footer">
         <div class="feedback" id="feedback"></div>
@@ -148,4 +137,3 @@
   <script src="script.js"></script>
 </body>
 </html>
-
