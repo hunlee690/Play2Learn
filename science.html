@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body data-subject="science">
-  <header class="app-header">
+  <header>
     <div class="nav-badge">🔬 Science Lab · Space · Animals · Experiments</div>
   </header>
 
@@ -22,7 +22,7 @@
           Welcome to the <span class="hero-highlight">Science Lab</span>!
         </h1>
         <p class="hero-subtitle">
-          Try different science tests — from warm-ups to bigger challenges.
+          Explore planets, animals and everyday science with short quiz games.
         </p>
 
         <div class="hero-buttons">
@@ -34,25 +34,13 @@
       </div>
 
       <aside class="hero-card">
-        <div class="hero-card-badge">Science XP Tracker</div>
-        <div class="hero-card-title">Today's Class Stars</div>
-        <div class="xp-row">
-          <div>
-            <div class="xp-label">Total XP earned</div>
-            <div class="xp-value" id="xpValue">0 XP</div>
-          </div>
-          <div class="pill" id="levelBadge">Level 1 · Rookie</div>
-        </div>
-        <div class="progress-bar">
-          <div class="progress-fill" id="xpProgress"></div>
-        </div>
-        <div class="small-text">
-          Keep answering correctly to level up!
-        </div>
-        <div class="hero-card-footer">
-          <span>✔ Correct answers: <strong id="correctCount">0</strong></span>
-          <span>🏅 Best streak: <strong id="bestStreak">0</strong></span>
-        </div>
+        <div class="hero-card-title">Science tips</div>
+        <p class="small-text">
+          • Think about what you already know.<br>
+          • Look for key words: planet, animal, water…<br>
+          • Use logic and common sense.<br>
+          • It’s okay to guess and learn.
+        </p>
       </aside>
     </section>
 
@@ -99,9 +87,7 @@
       <div class="quiz-header">
         <div>
           <div class="quiz-title" id="quizTitle">Science Quiz</div>
-          <div class="quiz-progress-text" id="quizProgressText">
-            Question 1 of 5
-          </div>
+          <div class="quiz-progress-text" id="quizProgressText">Question 1 of 5</div>
         </div>
         <div class="score-pill" id="scoreDisplay">Score: 0</div>
       </div>
