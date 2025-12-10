@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body data-subject="english">
-  <header class="app-header">
+  <header>
     <div class="nav-badge">📚 English Quest · Words · Grammar · Spelling</div>
   </header>
 
@@ -22,7 +22,7 @@
           Welcome to the <span class="hero-highlight">English Quest</span>!
         </h1>
         <p class="hero-subtitle">
-          Pick a test: start with small word games or go for a big grammar challenge.
+          Practise word meanings, sentences and spelling with short, friendly quizzes.
         </p>
 
         <div class="hero-buttons">
@@ -34,25 +34,13 @@
       </div>
 
       <aside class="hero-card">
-        <div class="hero-card-badge">English XP Tracker</div>
-        <div class="hero-card-title">Today's Class Stars</div>
-        <div class="xp-row">
-          <div>
-            <div class="xp-label">Total XP earned</div>
-            <div class="xp-value" id="xpValue">0 XP</div>
-          </div>
-          <div class="pill" id="levelBadge">Level 1 · Rookie</div>
-        </div>
-        <div class="progress-bar">
-          <div class="progress-fill" id="xpProgress"></div>
-        </div>
-        <div class="small-text">
-          Every correct answer gives XP. Keep going!
-        </div>
-        <div class="hero-card-footer">
-          <span>✔ Correct answers: <strong id="correctCount">0</strong></span>
-          <span>🏅 Best streak: <strong id="bestStreak">0</strong></span>
-        </div>
+        <div class="hero-card-title">English tips</div>
+        <p class="small-text">
+          • Read the sentence out loud (in your head).<br>
+          • Try to imagine the meaning.<br>
+          • Eliminate answers that “sound wrong”.<br>
+          • Don’t worry — it’s just practice.
+        </p>
       </aside>
     </section>
 
@@ -76,7 +64,7 @@
         <article class="category-card" data-mode="speed">
           <div class="category-icon">✏️</div>
           <div class="category-title">Grammar Sprint</div>
-          <div class="category-level">5 mixed grammar questions.</div>
+          <div class="category-level">5 short grammar questions.</div>
           <div class="category-meta">
             <span>Level: Medium</span>
             <span>5 questions</span>
@@ -99,9 +87,7 @@
       <div class="quiz-header">
         <div>
           <div class="quiz-title" id="quizTitle">English Quiz</div>
-          <div class="quiz-progress-text" id="quizProgressText">
-            Question 1 of 5
-          </div>
+          <div class="quiz-progress-text" id="quizProgressText">Question 1 of 5</div>
         </div>
         <div class="score-pill" id="scoreDisplay">Score: 0</div>
       </div>
