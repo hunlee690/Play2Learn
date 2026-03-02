@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="nav-row">
+      <a class="btn btn-ghost" id="backBtn" href="index.html">⬅ Back</a>
+      <div class="nav-badge" id="crumbBadge">📘 Lesson</div>
+      <span></span>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="lesson-hero">
+      <div>
+        <h1 class="page-title" id="lessonTitle">Lesson Title</h1>
+        <p class="page-subtitle" id="lessonDesc">Lesson description…</p>
+      </div>
+      <div class="pill" id="lessonTypePill">GRAMMAR</div>
+    </section>
+
+    <section class="video-section">
+      <h2 class="section-title">Video <span>Watch then take the quiz</span></h2>
+
+      <div class="video-wrap">
+        <iframe
+          id="videoFrame"
+          width="560"
+          height="315"
+          src=""
+          title="Lesson Video"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </section>
+
+    <section class="quiz-card" id="quizCard" style="display:block;">
+      <div class="quiz-header">
+        <div>
+          <div class="quiz-title" id="quizTitle">Quiz</div>
+          <div class="quiz-progress-text" id="quizProgressText">Question 1 of 5</div>
+        </div>
+        <div class="score-pill" id="scoreDisplay">Score: 0</div>
+      </div>
+
+      <div>
+        <div class="quiz-question" id="quizQuestion"></div>
+        <ul class="quiz-options" id="quizOptions"></ul>
+      </div>
+
+      <div class="quiz-footer">
+        <div class="feedback" id="feedback"></div>
+        <button class="btn btn-primary" id="nextBtn" disabled>Next ▶</button>
+      </div>
+
+      <div class="quiz-result" id="quizResult">
+        <div class="star-row" id="starRow"></div>
+        <h3 id="resultTitle"></h3>
+        <p id="resultSummary"></p>
+        <button class="btn btn-primary" id="playAgainBtn">🔁 Play again</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">© <span id="year"></span> Learning Hub</footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

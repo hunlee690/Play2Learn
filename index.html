@@ -2,138 +2,93 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Fun Quizzes for Kids</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Learning Hub</title>
 
-  <!-- Google Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
-
-  <!-- CSS -->
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
+
+  <style>
+    /* ✅ Make Grammar & Textbook EXTRA LARGE */
+    .home-big-title {
+      font-size: 3rem;
+      font-weight: 900;
+    }
+
+    /* ✅ Make main heading smaller */
+    .hero-title {
+      font-size: 1.8rem !important;
+    }
+
+    @media (max-width: 600px) {
+      .home-big-title {
+        font-size: 2.2rem;
+      }
+
+      .hero-title {
+        font-size: 1.4rem !important;
+      }
+    }
+  </style>
 </head>
 
 <body>
-  <header>
-    <div class="nav-badge">For Schools · Kids · Fun Tests</div>
+  <header class="header">
+    <div class="nav-badge">📚 Learning Hub · Video + Quiz</div>
   </header>
 
-  <main>
-    <!-- HERO -->
+  <main class="container">
     <section class="hero">
       <div>
         <h1 class="hero-title">
-          Turn tests into <span class="hero-highlight">adventures</span>.
+          Learn with <span class="hero-highlight">Videos</span> &
+          <span class="hero-highlight">Quizzes</span>
         </h1>
         <p class="hero-subtitle">
-          Kids answer quizzes like mini games with clear scores at the end — perfect for quick classroom tests.
+          Choose Grammar topics or Textbook classes. Every lesson has a video and a quiz.
         </p>
-
-        <div class="hero-tags">
-          <span class="tag">🎯 Kid-friendly questions</span>
-          <span class="tag">🧠 Math · Science · English</span>
-          <span class="tag">⏱ Short, simple tests</span>
-        </div>
-
-        <div class="hero-buttons">
-          <button class="btn btn-primary" id="startAnyQuizBtn">
-            ▶ Start a Quick Random Quiz
-          </button>
-        </div>
       </div>
 
       <aside class="hero-card">
-        <div class="hero-card-title">How it works</div>
+        <div class="hero-card-title">How to use</div>
         <p class="small-text">
-          • Choose a subject.<br>
-          • Pick a test type (easy, speed or challenge).<br>
-          • Tap the correct answers.<br>
-          • See the score and stars at the end.
-        </p>
-        <p class="small-text">
-          Great for class warm-ups, homework checks, or practice time.
+          • Pick Grammar or Textbook<br>
+          • Open a topic / class<br>
+          • Watch the video<br>
+          • Take the quiz
         </p>
       </aside>
     </section>
 
-    <!-- SUBJECT SELECTION -->
     <section>
-      <h2 class="section-title">
-        Pick a subject to start
-        <span>Tap a subject card to open that quiz screen.</span>
-      </h2>
+      <h2 class="section-title">Start here <span>Pick one</span></h2>
 
-      <div class="category-grid">
+      <div class="grid">
 
-        <article class="category-card" data-category="math">
-          <div class="category-icon">➕</div>
-          <div class="category-title">Math Adventures</div>
-          <div class="category-level">Add, subtract & think fast.</div>
-          <div class="category-meta">
-            <span>Fun tests</span>
-            <span>Ages 7–11</span>
-          </div>
-        </article>
+        <!-- EXTRA LARGE Grammar -->
+        <a class="card" href="grammar.html">
+          <div class="card-icon">📝</div>
+          <div class="card-title home-big-title">Grammar</div>
+          <div class="card-desc">Noun, Pronoun, Verb, Tenses, …</div>
+        </a>
 
-        <article class="category-card" data-category="science">
-          <div class="category-icon">🔬</div>
-          <div class="category-title">Science Lab</div>
-          <div class="category-level">Space, animals & experiments.</div>
-          <div class="category-meta">
-            <span>Fun tests</span>
-            <span>Ages 8–12</span>
-          </div>
-        </article>
-
-        <article class="category-card" data-category="english">
-          <div class="category-icon">📚</div>
-          <div class="category-title">English Quest</div>
-          <div class="category-level">Words, grammar & spelling.</div>
-          <div class="category-meta">
-            <span>Fun tests</span>
-            <span>Ages 8–12</span>
-          </div>
-        </article>
+        <!-- EXTRA LARGE Textbook -->
+        <a class="card" href="textbook.html">
+          <div class="card-icon">🏫</div>
+          <div class="card-title home-big-title">Textbook</div>
+          <div class="card-desc">Classes 1st to 10th</div>
+        </a>
 
       </div>
     </section>
-
-    <!-- QUIZ AREA (for quick random quiz on home page) -->
-    <section class="quiz-card" id="quizCard">
-      <div class="quiz-header">
-        <div>
-          <div class="quiz-title" id="quizTitle">Quiz</div>
-          <div class="quiz-progress-text" id="quizProgressText">Question 1 of 5</div>
-        </div>
-        <div class="score-pill" id="scoreDisplay">Score: 0</div>
-      </div>
-
-      <div>
-        <div class="quiz-question" id="quizQuestion"></div>
-        <ul class="quiz-options" id="quizOptions"></ul>
-      </div>
-
-      <div class="quiz-footer">
-        <div class="feedback" id="feedback"></div>
-        <button class="btn btn-primary" id="nextBtn" disabled>Next ▶</button>
-      </div>
-
-      <div class="quiz-result" id="quizResult">
-        <div class="star-row" id="starRow"></div>
-        <h3 id="resultTitle"></h3>
-        <p id="resultSummary"></p>
-        <button class="btn btn-primary" id="playAgainBtn">🔁 Play again</button>
-      </div>
-    </section>
-
   </main>
 
-  <footer>
-    © <span id="year"></span> Fun quiz app for schools
+  <footer class="footer">
+    © <span id="year"></span> Learning Hub
   </footer>
 
-  <!-- JS -->
-  <script src="script.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
