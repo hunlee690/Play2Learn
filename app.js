@@ -253,7 +253,6 @@ function buildGrammarList() {
   if (!grid) return;
 
   const mode = getParam("mode");
-  const selectedClass = getParam("class");
   const selectedTopic = getParam("topic");
   const count = Number(getParam("count"));
 
@@ -262,11 +261,10 @@ function buildGrammarList() {
 
   if (!mode) return renderGrammarHome(grid);
   if (mode === "learning") return renderGrammarLearning(grid);
-  if (mode === "fun" && !selectedClass) return renderFunClassSelection(grid);
-  if (mode === "fun" && selectedClass && !selectedTopic) return renderFunTopicSelection(grid, selectedClass);
-  if (mode === "fun" && selectedClass && selectedTopic && !count) return renderQuizLengthSelection(grid, selectedClass, selectedTopic);
-  if (mode === "fun" && selectedClass && selectedTopic && [10, 20].includes(count)) {
-    return renderFunQuizPage(selectedClass, selectedTopic, count);
+  if (mode === "fun" && !selectedTopic) return renderFunTopicSelection(grid);
+  if (mode === "fun" && selectedTopic && !count) return renderQuizLengthSelection(grid, selectedTopic);
+  if (mode === "fun" && selectedTopic && [10, 20].includes(count)) {
+    return renderFunQuizPage(selectedTopic, count);
   }
 
   renderGrammarHome(grid);
@@ -289,7 +287,7 @@ function renderGrammarHome(grid) {
       href: "grammar.html?mode=fun",
       icon: "🎮",
       title: "Fun Test",
-      desc: "Choose class, topic, and 10 or 20 random questions.",
+      desc: "Choose a topic, then pick 10 or 20 random questions.",
     },
   ];
 
@@ -328,43 +326,19 @@ function renderGrammarLearning(grid) {
   });
 }
 
-function renderFunClassSelection(grid) {
+function renderFunTopicSelection(grid) {
   setText("grammarNavBadge", "🎮 Fun Test");
   setText("grammarPageTitle", "Fun Test");
-  setText("grammarPageSubtitle", "Choose your class first, then select a grammar topic.");
+  setText("grammarPageSubtitle", "Choose a grammar topic for your random quiz.");
   renderBreadcrumb([
     { label: "Grammar", href: "grammar.html" },
     { label: "Fun Test" },
   ]);
 
-  Array.from({ length: 10 }).forEach((_, i) => {
-    const classNo = i + 1;
-    const a = document.createElement("a");
-    a.className = "card";
-    a.href = `grammar.html?mode=fun&class=${classNo}`;
-    a.innerHTML = `
-      <div class="card-icon">🏫</div>
-      <div class="card-title">Class ${classNo}</div>
-      <div class="card-desc">Practice grammar tests for Class ${classNo}.</div>
-    `;
-    grid.appendChild(a);
-  });
-}
-
-function renderFunTopicSelection(grid, selectedClass) {
-  setText("grammarNavBadge", `🎮 Class ${selectedClass}`);
-  setText("grammarPageTitle", `Class ${selectedClass} Fun Test`);
-  setText("grammarPageSubtitle", "Choose a topic for your grammar quiz.");
-  renderBreadcrumb([
-    { label: "Grammar", href: "grammar.html" },
-    { label: "Fun Test", href: "grammar.html?mode=fun" },
-    { label: `Class ${selectedClass}` },
-  ]);
-
   FUN_TOPICS.forEach((topic) => {
     const a = document.createElement("a");
     a.className = "card";
-    a.href = `grammar.html?mode=fun&class=${encodeURIComponent(selectedClass)}&topic=${encodeURIComponent(topic.id)}`;
+    a.href = `grammar.html?mode=fun&topic=${encodeURIComponent(topic.id)}`;
     a.innerHTML = `
       <div class="card-icon">${topic.icon}</div>
       <div class="card-title">${topic.title}</div>
@@ -374,9 +348,9 @@ function renderFunTopicSelection(grid, selectedClass) {
   });
 }
 
-function renderQuizLengthSelection(grid, selectedClass, selectedTopic) {
+function renderQuizLengthSelection(grid, selectedTopic) {
   const topic = topicById(selectedTopic);
-  if (!topic) return renderFunTopicSelection(grid, selectedClass);
+  if (!topic) return renderFunTopicSelection(grid);
 
   setText("grammarNavBadge", `🎮 ${topic.title}`);
   setText("grammarPageTitle", `${topic.title} Quiz`);
@@ -384,18 +358,17 @@ function renderQuizLengthSelection(grid, selectedClass, selectedTopic) {
   renderBreadcrumb([
     { label: "Grammar", href: "grammar.html" },
     { label: "Fun Test", href: "grammar.html?mode=fun" },
-    { label: `Class ${selectedClass}`, href: `grammar.html?mode=fun&class=${encodeURIComponent(selectedClass)}` },
     { label: topic.title },
   ]);
 
   [10, 20].forEach((quizCount) => {
     const a = document.createElement("a");
     a.className = "card big-choice";
-    a.href = `grammar.html?mode=fun&class=${encodeURIComponent(selectedClass)}&topic=${encodeURIComponent(selectedTopic)}&count=${quizCount}`;
+    a.href = `grammar.html?mode=fun&topic=${encodeURIComponent(selectedTopic)}&count=${quizCount}`;
     a.innerHTML = `
       <div class="card-icon">${quizCount === 10 ? "⚡" : "🏆"}</div>
       <div class="card-title">${quizCount} Questions</div>
-      <div class="card-desc">Start a fresh ${quizCount}-question quiz for Class ${selectedClass}.</div>
+      <div class="card-desc">Start a fresh ${quizCount}-question random quiz.</div>
     `;
     grid.appendChild(a);
   });
@@ -535,7 +508,6 @@ function updateScoreUI() {
 // FUN TEST QUIZ ENGINE
 // =========================
 let funQuizState = {
-  classNo: null,
   topicId: null,
   topicTitle: null,
   questions: [],
@@ -544,7 +516,7 @@ let funQuizState = {
   answers: [],
 };
 
-function renderFunQuizPage(selectedClass, selectedTopic, count) {
+function renderFunQuizPage(selectedTopic, count) {
   const topic = topicById(selectedTopic);
   const grid = document.getElementById("grammarGrid");
   const mount = document.getElementById("funQuizMount");
@@ -553,20 +525,18 @@ function renderFunQuizPage(selectedClass, selectedTopic, count) {
   if (grid) grid.innerHTML = "";
   setText("grammarNavBadge", `🎮 ${topic.title}`);
   setText("grammarPageTitle", `${topic.title} Quiz`);
-  setText("grammarPageSubtitle", `Class ${selectedClass} · ${count} random questions`);
+  setText("grammarPageSubtitle", `${count} random questions · New quiz every time`);
   renderBreadcrumb([
     { label: "Grammar", href: "grammar.html" },
     { label: "Fun Test", href: "grammar.html?mode=fun" },
-    { label: `Class ${selectedClass}`, href: `grammar.html?mode=fun&class=${encodeURIComponent(selectedClass)}` },
-    { label: topic.title, href: `grammar.html?mode=fun&class=${encodeURIComponent(selectedClass)}&topic=${encodeURIComponent(selectedTopic)}` },
+    { label: topic.title, href: `grammar.html?mode=fun&topic=${encodeURIComponent(selectedTopic)}` },
     { label: `${count} Questions` },
   ]);
 
   funQuizState = {
-    classNo: selectedClass,
     topicId: selectedTopic,
     topicTitle: topic.title,
-    questions: generateFunQuestions(selectedTopic, selectedClass, count),
+    questions: generateFunQuestions(selectedTopic, count),
     index: 0,
     score: 0,
     answers: [],
@@ -575,9 +545,9 @@ function renderFunQuizPage(selectedClass, selectedTopic, count) {
   mount.innerHTML = `
     <section class="fun-quiz-card">
       <div class="fun-meta-row">
-        <span class="fun-meta-pill">Class ${selectedClass}</span>
         <span class="fun-meta-pill">${topic.title}</span>
         <span class="fun-meta-pill">${count} Questions</span>
+        <span class="fun-meta-pill">Random Quiz</span>
       </div>
 
       <div class="quiz-header">
@@ -612,7 +582,75 @@ function renderFunQuizPage(selectedClass, selectedTopic, count) {
   renderFunQuestion();
 }
 
-function generateFunQuestions(topicId, classNo, count) {
+function getClassDifficulty(classNo) {
+  const cls = Number(classNo);
+  if (cls <= 2) return { band: "starter", label: "Starter", desc: "picture-word level" };
+  if (cls <= 4) return { band: "easy", label: "Easy", desc: "simple sentence level" };
+  if (cls <= 6) return { band: "medium", label: "Medium", desc: "school grammar level" };
+  if (cls <= 8) return { band: "hard", label: "Hard", desc: "context sentence level" };
+  return { band: "advanced", label: "Advanced", desc: "exam-style level" };
+}
+
+function adaptiveSlice(items, classNo, count) {
+  const cls = Number(classNo);
+  const shuffled = shuffleArray(items);
+  const size = shuffled.length;
+  let start = 0;
+  let end = size;
+
+  if (cls <= 2) {
+    end = Math.ceil(size * 0.45);
+  } else if (cls <= 4) {
+    start = Math.floor(size * 0.15);
+    end = Math.ceil(size * 0.65);
+  } else if (cls <= 6) {
+    start = Math.floor(size * 0.30);
+    end = Math.ceil(size * 0.82);
+  } else if (cls <= 8) {
+    start = Math.floor(size * 0.45);
+    end = size;
+  } else {
+    start = Math.floor(size * 0.55);
+    end = size;
+  }
+
+  let selected = shuffled.slice(start, Math.max(end, start + count));
+  if (selected.length < count) selected = shuffled;
+  return selected;
+}
+
+function adaptQuestionText(topicId, baseText, correctAnswer, classNo) {
+  const cls = Number(classNo);
+  if (cls <= 4) return baseText;
+
+  if (topicId === "opposite" && cls >= 7) {
+    return `In the sentence, choose the best opposite of '${correctAnswer}': ${baseText}`;
+  }
+
+  if (topicId === "gender-change" && cls >= 7) {
+    return `${baseText} Choose the grammatically correct paired noun.`;
+  }
+
+  if (["article", "modal", "preposition"].includes(topicId) && cls >= 7) {
+    return `${baseText} Choose the most suitable option according to the sentence context.`;
+  }
+
+  if (topicId === "verbs" && cls >= 7) {
+    return `${baseText} Choose the correct verb form.`;
+  }
+
+  if (topicId === "phrasal-verbs" && cls >= 7) {
+    return `${baseText} Choose the meaning that best fits formal English usage.`;
+  }
+
+  return baseText;
+}
+
+function makeAdaptiveQuestion(topicId, question, correctAnswer, wrongAnswers, classNo) {
+  return makeQuestion(adaptQuestionText(topicId, question, correctAnswer, classNo), correctAnswer, wrongAnswers);
+}
+
+function generateFunQuestions(topicId, count) {
   let pool = [];
 
   if (topicId === "opposite") {
@@ -650,7 +688,7 @@ function generateFunQuestions(topicId, classNo, count) {
   }
 
   if (topicId === "numbers") {
-    pool = generateNumberQuestions(count + 20, Number(classNo));
+    pool = generateNumberQuestions(count + 25);
   }
 
   if (topicId === "preposition") {
@@ -662,7 +700,7 @@ function generateFunQuestions(topicId, classNo, count) {
     pool = phrasalVerbBank.map(([question, answer]) => makeQuestion(question, answer, answers));
   }
 
-  // Every start reshuffles questions and options, so a new quiz feels different.
+  // Every start reshuffles questions and options, so the quiz feels fresh.
   const questions = shuffleArray(pool).slice(0, count).map((q) => makeQuestion(q.question, q.options[q.correctIndex], q.options));
   return questions.length ? questions : [makeQuestion("No questions found for this topic.", "Try another topic", ["A", "B", "C"])] ;
 }
@@ -676,8 +714,8 @@ function numberToWords(num) {
   return String(num);
 }
 
-function generateNumberQuestions(total, classNo) {
-  const max = classNo <= 2 ? 50 : classNo <= 5 ? 200 : 999;
+function generateNumberQuestions(total) {
+  const max = 999;
   const pool = [];
   for (let i = 0; i < total; i++) {
     const n = Math.floor(Math.random() * max) + 1;
@@ -764,8 +802,8 @@ function renderFunResult() {
   const percent = Math.round((correct / total) * 100);
   const message = percent >= 80 ? "Excellent work!" : percent >= 50 ? "Good job, keep practicing." : "Nice try, revise this topic once more.";
 
-  const retryUrl = `grammar.html?mode=fun&class=${encodeURIComponent(funQuizState.classNo)}&topic=${encodeURIComponent(funQuizState.topicId)}&count=${total}`;
-  const topicUrl = `grammar.html?mode=fun&class=${encodeURIComponent(funQuizState.classNo)}`;
+  const retryUrl = `grammar.html?mode=fun&topic=${encodeURIComponent(funQuizState.topicId)}&count=${total}`;
+  const topicUrl = `grammar.html?mode=fun`;
 
   const reviewHtml = funQuizState.answers.slice(0, 5).map((answer, index) => `
     <div class="review-item">
@@ -778,7 +816,7 @@ function renderFunResult() {
     <section class="fun-quiz-card quiz-result" style="display:block;">
       <div class="star-row">${percent >= 80 ? "⭐️⭐️⭐️" : percent >= 50 ? "⭐️⭐️" : "⭐️"}</div>
       <h3>${message}</h3>
-      <p>Here is your final result for Class ${funQuizState.classNo} · ${funQuizState.topicTitle}.</p>
+      <p>Here is your final result for ${funQuizState.topicTitle}.</p>
 
       <div class="result-grid">
         <div class="result-box"><span class="result-number">${correct}/${total}</span><span class="result-label">Correct</span></div>
@@ -795,7 +833,7 @@ function renderFunResult() {
       <div class="result-actions">
         <a class="btn btn-primary" href="${retryUrl}">🔁 New Random Quiz</a>
         <a class="btn btn-ghost" href="${topicUrl}">📚 Change Topic</a>
-        <a class="btn btn-ghost" href="grammar.html?mode=fun">🏫 Change Class</a>
+        <a class="btn btn-ghost" href="grammar.html?mode=fun">🎮 All Topics</a>
       </div>
     </section>
   `;
