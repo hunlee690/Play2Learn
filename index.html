@@ -11,49 +11,51 @@
   <link rel="stylesheet" href="style.css" />
 
   <style>
-    /* ✅ Make Grammar & Textbook EXTRA LARGE */
     .home-big-title {
       font-size: 3rem;
       font-weight: 900;
+      margin-bottom: 0.35rem;
     }
 
-    /* ✅ Make main heading smaller */
     .hero-title {
       font-size: 1.8rem !important;
     }
 
     @media (max-width: 600px) {
-      .home-big-title {
-        font-size: 2.2rem;
-      }
-
-      .hero-title {
-        font-size: 1.4rem !important;
-      }
+      .home-big-title { font-size: 2.2rem; }
+      .hero-title { font-size: 1.4rem !important; }
     }
   </style>
 </head>
 
 <body>
+  <header class="header">
+    <div class="nav-row">
+      <span></span>
+      <div class="nav-badge">🎒 Learning Hub</div>
+      <span></span>
+    </div>
+  </header>
+
+  <main class="container">
     <section>
+      <h1 class="hero-title">Start learning</h1>
+      <p class="page-subtitle">Choose Grammar for lessons and fun tests, or Textbook for class lessons.</p>
+
       <h2 class="section-title">Start here <span>Pick one</span></h2>
 
       <div class="grid">
-
-        <!-- EXTRA LARGE Grammar -->
-        <a class="card" href="grammar.html">
+        <a class="card big-choice" href="grammar.html">
           <div class="card-icon">📝</div>
           <div class="card-title home-big-title">Grammar</div>
-          <div class="card-desc">Noun, Pronoun, Verb, Tenses, …</div>
+          <div class="card-desc">Learning videos, quizzes, and fun grammar tests.</div>
         </a>
 
-        <!-- EXTRA LARGE Textbook -->
-        <a class="card" href="textbook.html">
+        <a class="card big-choice" href="textbook.html">
           <div class="card-icon">🏫</div>
           <div class="card-title home-big-title">Textbook</div>
-          <div class="card-desc">Classes 1st to 10th</div>
+          <div class="card-desc">Classes 1st to 10th.</div>
         </a>
-
       </div>
     </section>
   </main>
@@ -64,5 +66,4 @@
 
   <script src="app.js"></script>
 </body>
-
 </html>
